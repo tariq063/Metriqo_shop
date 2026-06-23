@@ -107,8 +107,22 @@
     const sel = document.querySelector('input[name="delivery"]:checked');
     return { charge: parseInt(sel.value, 10), area: sel.dataset.area };
   };
+  const MIN_QTY = 1;
+  const MAX_QTY = 10; // customers can order 1–10 units per order
+  const minusBtn = document.getElementById('minus');
+  const plusBtn = document.getElementById('plus');
+
   const updateTotal = () => {
-    const subtotal = currentPrice() * parseInt(qtyInput.value, 10);
+    let q = parseInt(qtyInput.value, 10);
+    if (isNaN(q) || q < MIN_QTY) q = MIN_QTY;
+    if (q > MAX_QTY) q = MAX_QTY;
+    qtyInput.value = q;
+
+    // turn the buttons off at the limits
+    minusBtn.disabled = q <= MIN_QTY;
+    plusBtn.disabled = q >= MAX_QTY;
+
+    const subtotal = currentPrice() * q;
     const delivery = getDelivery().charge;
     subtotalEl.textContent = fmtBn(subtotal);
     deliveryCostEl.textContent = fmtBn(delivery);
@@ -117,12 +131,11 @@
 
   productSel.addEventListener('change', updateTotal);
   deliveryRadios.forEach((r) => r.addEventListener('change', updateTotal));
-  document.getElementById('minus').addEventListener('click', () => {
-    let q = parseInt(qtyInput.value, 10);
-    if (q > 1) qtyInput.value = q - 1;
+  minusBtn.addEventListener('click', () => {
+    qtyInput.value = parseInt(qtyInput.value, 10) - 1;
     updateTotal();
   });
-  document.getElementById('plus').addEventListener('click', () => {
+  plusBtn.addEventListener('click', () => {
     qtyInput.value = parseInt(qtyInput.value, 10) + 1;
     updateTotal();
   });
@@ -144,13 +157,14 @@
   /* ---- Form validation + submit ---- */
   const form = document.getElementById('orderForm');
   const submitBtn = document.getElementById('submitBtn');
-  const toast = document.getElementById('toast');
-  let toastTimer;
-  const showToast = (msg) => {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+  const formMsg = document.getElementById('formMsg');
+  const showMsg = (msg) => {
+    formMsg.textContent = msg;
+    formMsg.classList.add('show');
+  };
+  const clearMsg = () => {
+    formMsg.textContent = '';
+    formMsg.classList.remove('show');
   };
 
   const validators = {
@@ -194,9 +208,12 @@
       if (!valid) ok = false;
     });
     if (!ok) {
-      showToast('⚠️ অনুগ্রহ করে চিহ্নিত ঘরগুলো ঠিক করুন।');
+      showMsg('⚠️ অনুগ্রহ করে চিহ্নিত ঘরগুলো ঠিক করুন।');
+      const firstInvalid = form.querySelector('.field.invalid input, .field.invalid textarea');
+      if (firstInvalid) firstInvalid.focus();
       return;
     }
+    clearMsg();
 
     const orderId = makeOrderId();
     const subtotal = currentPrice() * parseInt(qtyInput.value, 10);
@@ -226,11 +243,11 @@
         qtyInput.value = 1;
         updateTotal();
       } else {
-        showToast('❌ দুঃখিত, কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন বা কল করুন।');
+        showMsg('❌ দুঃখিত, কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন বা কল করুন।');
       }
     } catch (err) {
       console.error(err);
-      showToast('❌ নেটওয়ার্ক সমস্যা। আবার চেষ্টা করুন বা সরাসরি কল করুন।');
+      showMsg('❌ নেটওয়ার্ক সমস্যা। আবার চেষ্টা করুন বা সরাসরি কল করুন।');
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = original;
@@ -238,7 +255,10 @@
   });
 
   form.querySelectorAll('input,textarea').forEach((el) =>
-    el.addEventListener('input', () => el.closest('.field').classList.remove('invalid'))
+    el.addEventListener('input', () => {
+      el.closest('.field').classList.remove('invalid');
+      clearMsg();
+    })
   );
 
   /* ---- Order ID generator (e.g. MT-20260623-4821) ---- */

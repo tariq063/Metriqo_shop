@@ -78,7 +78,14 @@ h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.15;color:var(--navy)}
 .header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:box-shadow var(--t),border-color var(--t),background var(--t)}
 .header.scrolled{box-shadow:var(--shadow-sm);border-color:var(--line)}
 .header__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 0}
-.brand{display:flex;align-items:center;gap:.6rem}
+.brand{display:flex;align-items:center;gap:.55rem}
+.brand__img{height:50px;width:auto;display:block;border-radius:8px;transition:transform var(--t)}
+.brand:hover .brand__img{transform:scale(1.06)}
+.brand__name{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.7rem;line-height:1;letter-spacing:.3px;color:var(--navy)}
+.brand__name span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand__name--footer{color:#fff;font-size:1.6rem}
+.brand__img--footer{height:46px}
+.brand__fallback{align-items:center;gap:.6rem}
 .brand__logo{display:grid;place-items:center;transition:transform var(--t)}
 .brand:hover .brand__logo{transform:rotate(-8deg) scale(1.08)}
 .brand__text strong{font-family:'Poppins';font-size:1.3rem;display:block;color:var(--navy)}
@@ -208,7 +215,8 @@ h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.15;color:var(--navy)}
 .field--row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem}
 .qty__control{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;width:fit-content}
 .qty__control button{width:42px;height:44px;border:none;background:#f0f6f6;font-size:1.3rem;cursor:pointer;color:var(--navy);transition:background var(--t)}
-.qty__control button:hover{background:var(--teal);color:#fff}
+.qty__control button:hover:not(:disabled){background:var(--teal);color:#fff}
+.qty__control button:disabled{opacity:.4;cursor:not-allowed;background:#f0f6f6;color:var(--muted)}
 .qty__control input{width:52px;text-align:center;border:none;background:#fff;font-weight:700;font-size:1.05rem}
 
 /* delivery area radio cards */
@@ -293,9 +301,10 @@ h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.15;color:var(--navy)}
 .modal__details .row--total{background:#f4faf9}
 .modal__details .row--total b{color:var(--teal-deep);font-size:1.1rem;font-family:'Poppins'}
 
-/* ---------- Toast ---------- */
-.toast{position:fixed;left:50%;bottom:2rem;transform:translate(-50%,120%);background:var(--navy);color:#fff;padding:1rem 1.6rem;border-radius:999px;box-shadow:var(--shadow-lg);z-index:60;font-weight:600;transition:transform .45s cubic-bezier(.2,.7,.2,1);max-width:90%;text-align:center}
-.toast.show{transform:translate(-50%,0)}
+/* ---------- Inline form message ---------- */
+.form-msg{display:none;margin:0 0 .8rem;padding:.7rem 1rem;border-radius:var(--radius-sm);background:#fff0f0;color:var(--sale);font-weight:600;font-size:.9rem;text-align:center;border:1px solid #ffd6d6}
+.form-msg.show{display:block;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
 /* ---------- Scroll reveal ---------- */
 .reveal{opacity:0;transform:translateY(34px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
@@ -329,28 +338,30 @@ h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.15;color:var(--navy)}
   .header__actions .btn--sm{padding:.55rem .9rem;font-size:.85rem}
   .footer__bottom{flex-direction:column;text-align:center}
 
-  /* order form on mobile */
+  /* logo + order form on mobile */
+  .brand__img{height:42px}
   .order__form{padding:1.4rem 1.1rem}
   .delivery{grid-template-columns:1fr}
 
-  /* confirmation modal on mobile */
-  .modal{padding:1rem}
-  .modal__box{padding:1.5rem 1.1rem 1.2rem;border-radius:16px}
-  .modal__close{top:.6rem;right:.7rem;font-size:1.6rem}
-  .modal__check{width:52px;height:52px;font-size:1.5rem;margin-bottom:.7rem}
-  .modal__box h3{font-size:1.15rem}
-  .modal__sub{font-size:.85rem;margin:.3rem 0 .9rem}
-  .modal__id{padding:.65rem .85rem;margin-bottom:.9rem}
-  .modal__id span{font-size:.75rem}
-  .modal__id b{font-size:1rem}
-  .modal__details{margin-bottom:.9rem}
-  .modal__details .row{padding:.55rem .8rem;font-size:.85rem;gap:.6rem}
-  .modal__details .row--total b{font-size:1.1rem}
+  /* confirmation modal on mobile — compact so it fits one screen */
+  .modal{padding:.8rem}
+  .modal__box{padding:1.1rem 1rem 1rem;border-radius:16px}
+  .modal__close{top:.5rem;right:.6rem;font-size:1.5rem}
+  .modal__check{width:42px;height:42px;font-size:1.3rem;margin-bottom:.4rem}
+  .modal__box h3{font-size:1.05rem}
+  .modal__sub{font-size:.8rem;margin:.2rem 0 .7rem}
+  .modal__id{padding:.5rem .8rem;margin-bottom:.65rem}
+  .modal__id span{font-size:.72rem}
+  .modal__id b{font-size:.95rem}
+  .modal__details{margin-bottom:.7rem}
+  .modal__details .row{padding:.4rem .75rem;font-size:.82rem;gap:.6rem}
+  .modal__details .row--total b{font-size:1rem}
+  .modal__box>.btn{padding:.8em 1.6em}
 }
 @media (max-width:380px){
-  .modal__id{flex-direction:column;align-items:flex-start;gap:.2rem}
-  .modal__details .row{flex-direction:column;align-items:flex-start;gap:.1rem}
-  .modal__details .row b{text-align:left}
+  .modal__id{flex-direction:column;align-items:flex-start;gap:.15rem}
+  .modal__id b{text-align:left}
+  .brand__name{font-size:1.45rem}
 }
 
 /* Respect reduced motion */
