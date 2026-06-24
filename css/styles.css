@@ -180,7 +180,6 @@ h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.15;color:var(--navy)}
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t);position:relative}
 .card:hover{transform:translateY(-10px);box-shadow:var(--shadow-lg)}
-.card--combo{outline:2px solid var(--teal);outline-offset:-2px}
 .card__media{aspect-ratio:1/.9;background:linear-gradient(135deg,#eef6f6,#dff0ef);display:grid;place-items:center;position:relative;overflow:hidden}
 .card__media img{width:82%;height:82%;object-fit:contain;transition:transform .5s}
 .card:hover .card__media img{transform:scale(1.08)}
