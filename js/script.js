@@ -259,13 +259,10 @@
     })
   );
 
-  /* ---- Order ID generator (e.g. TB-20260623-4821) ---- */
+  /* ---- Order ID generator (e.g. TB-482193) ---- */
   function makeOrderId() {
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2, '0');
-    const date = '' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
-    const rand = Math.floor(1000 + Math.random() * 9000);
-    return 'TB-' + date + '-' + rand;
+    const rand = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+    return 'TB-' + rand;
   }
 
   /* ---- Order confirmation modal ---- */
