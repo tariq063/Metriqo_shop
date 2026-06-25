@@ -1,5 +1,5 @@
 /* ===================================================================
-   MeTriqo — interactions, animations & order submission
+   Tarsonbd — interactions, animations & order submission
    ===================================================================
 
    >>> ORDER SETUP — paste ONE endpoint URL below <<<
